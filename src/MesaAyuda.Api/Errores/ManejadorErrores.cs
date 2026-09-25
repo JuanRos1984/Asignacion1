@@ -23,7 +23,7 @@ public sealed class ManejadorErrores(IProblemDetailsService problemas, ILogger<M
             {
                 Status = StatusCodes.Status400BadRequest,
                 Title = "La petición no tiene un formato válido.",
-                Detail = "Revisa que el JSON esté bien formado y que los valores sean del tipo esperado."
+                Detail = "Revisa el cuerpo JSON y los parámetros de la consulta: algún valor no tiene el tipo esperado."
             },
             TicketNoEncontradoException => new ProblemDetails
             {
