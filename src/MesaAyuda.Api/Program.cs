@@ -23,6 +23,7 @@ var rutaDatos = Path.Combine(builder.Environment.ContentRootPath, almacenamiento
 builder.Services.AddSingleton<IRepositorioTickets>(new RepositorioTicketsJson(rutaDatos));
 
 builder.Services.AddSingleton<ServicioTickets>();
+builder.Services.AddSingleton<ServicioEstadisticas>();
 
 builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
@@ -42,6 +43,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/salud", () => Results.Ok(new { estado = "ok" }));
 app.MapTickets();
+app.MapEstadisticas();
 
 app.Run();
 
