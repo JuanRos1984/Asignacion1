@@ -1,5 +1,9 @@
+using System.Text.Json.Serialization;
+using MesaAyuda.Api.Endpoints;
+using MesaAyuda.Api.Errores;
 using MesaAyuda.Api.Persistencia;
 using MesaAyuda.Api.Registro;
+using MesaAyuda.Api.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +22,18 @@ var almacenamiento = builder.Configuration.GetSection(OpcionesAlmacenamiento.Sec
 var rutaDatos = Path.Combine(builder.Environment.ContentRootPath, almacenamiento.RutaDatos);
 builder.Services.AddSingleton<IRepositorioTickets>(new RepositorioTicketsJson(rutaDatos));
 
+builder.Services.AddSingleton<ServicioTickets>();
+
+builder.Services.ConfigureHttpJsonOptions(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ManejadorErrores>();
+
 var app = builder.Build();
 
+// El registro de peticiones va primero para ver el código final, incluso cuando hubo un error.
 app.UseMiddleware<RegistroPeticionesMiddleware>();
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())
 {
@@ -28,5 +41,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/salud", () => Results.Ok(new { estado = "ok" }));
+app.MapTickets();
 
 app.Run();
+
+// Permite a las pruebas de integración levantar la API en memoria.
+public partial class Program;
