@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MesaAyuda.Api/MesaAyuda.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MesaAyuda.Tests/MesaAyuda.Tests.csproj" />
+  </Folder>
+</Solution>
