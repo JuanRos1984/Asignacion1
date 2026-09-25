@@ -56,3 +56,9 @@ POST {{api}}/api/tickets/1/estado
 Content-Type: application/json
 
 { "estado": "Cancelado", "nota": "Prueba" }
+
+### Estadísticas generales
+GET {{api}}/api/estadisticas
+
+### Estadísticas de un rango de fechas (por fecha de creación)
+GET {{api}}/api/estadisticas?desde=2026-09-01T00:00:00Z&hasta=2026-09-30T23:59:59Z
