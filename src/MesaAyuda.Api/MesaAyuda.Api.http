@@ -1,0 +1,58 @@
+@api = http://localhost:5131
+
+### Estado del servicio
+GET {{api}}/salud
+
+### Crear un ticket
+POST {{api}}/api/tickets
+Content-Type: application/json
+
+{
+  "titulo": "No imprime el laboratorio 3",
+  "descripcion": "La impresora del laboratorio 3 muestra error de papel atascado sin tener papel.",
+  "solicitante": "docente@itla.edu.do",
+  "prioridad": "Alta"
+}
+
+### Crear un ticket con datos inválidos (400 con el detalle por campo)
+POST {{api}}/api/tickets
+Content-Type: application/json
+
+{
+  "titulo": "",
+  "solicitante": "no-es-correo",
+  "prioridad": "Alta"
+}
+
+### Listar la cola de atención (filtros opcionales: estado, prioridad, texto, vencidos, pagina, tamano)
+GET {{api}}/api/tickets?estado=Abierto&pagina=1&tamano=10
+
+### Buscar por texto
+GET {{api}}/api/tickets?texto=impresora
+
+### Ver el detalle, con historial y los estados a los que puede pasar
+GET {{api}}/api/tickets/1
+
+### Asignar un técnico
+PUT {{api}}/api/tickets/1/tecnico
+Content-Type: application/json
+
+{ "tecnico": "Soporte Nivel 1" }
+
+### Tomar el ticket
+POST {{api}}/api/tickets/1/estado
+Content-Type: application/json
+
+{ "estado": "EnProceso" }
+
+### Resolver (exige nota)
+POST {{api}}/api/tickets/1/estado
+Content-Type: application/json
+
+{ "estado": "Resuelto", "nota": "Se limpió el sensor de papel." }
+
+### Transición prohibida: de Resuelto a Cancelado (409)
+POST {{api}}/api/tickets/1/estado
+Content-Type: application/json
+
+{ "estado": "Cancelado", "nota": "Prueba" }
